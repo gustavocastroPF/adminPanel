@@ -1,0 +1,33 @@
+RewriteEngine on
+
+#login
+RewriteRule ^Login$ /adminPanel/login.php [NC]
+#Fim login
+
+# adminPanel
+RewriteRule ^$ /adminPanel/index.php
+RewriteRule ^Home$ /adminPanel/index.php [NC]
+
+    #usuarios
+    RewriteRule ^Usuarios$ /adminPanel/index.php?classe=usuario&pagina=List [NC]
+    RewriteRule ^Usuarios/Formulario$ /adminPanel/index.php?classe=usuario&pagina=Form [NC]
+    RewriteRule ^Usuarios/Formulario/([0-9]+)$ /adminPanel/index.php?classe=usuario&pagina=Form&id=$1 [NC]
+
+    #logs
+    RewriteRule ^Logs$ /adminPanel/index.php?classe=log&pagina=List [NC]
+    
+    #configuracoes
+    RewriteRule ^Configuracoes$ /adminPanel/index.php?classe=configuracao&pagina=List [NC]
+
+    #manutencoes  
+  
+        #categorias
+        RewriteRule ^Manutencoes/Categorias$ /adminPanel/index.php?classe=categoria&pagina=List [NC]
+        RewriteRule ^Manutencoes/Categorias/Formulario$ /adminPanel/index.php?classe=categoria&pagina=Form [NC]
+        RewriteRule ^Manutencoes/Categorias/Formulario/([0-9]+)$ /adminPanel/index.php?classe=categoria&pagina=Form&id=$1 [NC]
+
+        #subcategoria        
+        RewriteRule ^Manutencoes/Subcategorias$ /adminPanel/index.php?classe=subcategoria&pagina=List [NC]
+        RewriteRule ^Manutencoes/Subcategorias/Formulario$ /adminPanel/index.php?classe=subcategoria&pagina=Form [NC]
+        RewriteRule ^Manutencoes/Subcategorias/Formulario/([0-9]+)$ /adminPanel/index.php?classe=subcategoria&pagina=Form&id=$1 [NC]
+# Fim adminPanel
