@@ -75,7 +75,7 @@ switch ($action) {
 
         if ($_REQUEST['ordem'] != NULL)
             $s->ordem = $_REQUEST['ordem'];
-
+        
         $s->pgAtual = $_REQUEST['pagina'];
 
         $s->limite = $conf->configuracoes["nRegistros"];

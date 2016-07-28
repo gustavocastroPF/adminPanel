@@ -11,6 +11,8 @@ abstract class Generico extends Banco {
 
     public $tabela = NULL;
     public $camposValores = array();
+    //Teste
+    public $camposEstrangeiros = array();
     public $campoPk = NULL;
     public $valorPk = NULL;
     public $ordem = "id";

@@ -113,7 +113,7 @@ abstract class Banco {
             $this->stmt->bindValue($obj->campoPk, $obj->valorPk);
 
 
-            if($this->stmt->execute())
+            if ($this->stmt->execute())
                 echo "Objeto alterado com sucesso.";
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -152,7 +152,7 @@ abstract class Banco {
             $sql .= " ORDER BY " . $obj->ordem;
 
             $sql .=" LIMIT $inicio," . $obj->limite;
-            
+
             $this->stmt = $this->conexao->prepare($sql);
             $this->stmt->bindValue($obj->campoPk, $obj->valorPk);
             $this->stmt->execute();
@@ -162,6 +162,34 @@ abstract class Banco {
         } catch (PDOException $e) {
             echo $e;
         }
+    }
+
+    /*
+     * Falta adicionar: ordem, filtro, limites, paginacao
+     * Estudar a melhor forma para fazer isso
+     */
+
+    function toListTeste($obj) {
+
+        $sql = "SELECT * FROM " . $obj->tabela;
+        $this->stmt = $this->conexao->prepare($sql);
+        $this->stmt->bindValue($obj->campoPk, $obj->valorPk);
+        $this->stmt->execute();
+        $objects = $this->stmt->fetchAll(PDO::FETCH_OBJ);
+
+        foreach ($objects as $object) {
+            foreach ($obj->camposEstrangeiros as $fk) {
+                $FK = new $fk();
+                $attr = $FK->tabela;
+                $sql = "SELECT * FROM " . $FK->tabela . " WHERE " . $FK->campoPk . " = :" . $FK->campoPk;
+                $this->stmt = $this->conexao->prepare($sql);
+                $this->stmt->bindValue($FK->campoPk, $object->$attr);
+                $this->stmt->execute();
+                $object->$attr = $this->stmt->fetch(PDO::FETCH_OBJ);
+            }
+        }
+
+        return $objects;
     }
 
     function toListAll($obj) {
