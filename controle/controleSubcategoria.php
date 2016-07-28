@@ -85,6 +85,7 @@ switch ($action) {
         echo $rows;
 
         break;
+        
     case "GETCATEGORIAS":
 
         $c = new Categoria();

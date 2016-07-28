@@ -6,14 +6,17 @@ $s = new Subcategoria();
 
 array_push($s->camposEstrangeiros, "categoria");
 
-$a=json_encode($s->toListTeste($s));
+$s->filtro = "nome";
+$s->vlrFiltro = "a";
 
+$a = $s->toListTeste($s);
 
-echo $a;
+foreach ($a as $o) {
+    echo "id:" . $o->id . "<BR>";
+    echo "nome:" . $o->nome . "<BR>";
+    echo "categoria: [<br>";
+    echo "  id:" . $o->categoria->id . "<BR>";
+    echo "  nome:" . $o->categoria->nome . "<BR>";
+    echo "]<br>---------------------------<br>";
+}
 
-//foreach($a as $o){
-  //  echo "nome: ".$o->categoria->nome;
-//}
-
-//$x->a->b="aaa";
-//echo $x->a->bs;

@@ -144,7 +144,9 @@ abstract class Banco {
 
             $where = "";
 
-            if ($obj->filtro != NULL && $obj->vlrFiltro != NULL) {
+            if ($obj->filtro != NULL && $obj->vlrFiltro != NULL && in_array($obj->filtro, $obj->camposEstrangeiros)) {
+                " WHERE " . $obj->filtro . " IN ( SELECT id FROM " . $obj->filtro . " WHERE nome LIKE '" . $obj->vlrFiltro . "%')";
+            } else if ($obj->filtro != NULL && $obj->vlrFiltro != NULL) {
                 $where.=" WHERE " . $obj->filtro . " LIKE '" . $obj->vlrFiltro . "%'";
             }
 
@@ -171,7 +173,20 @@ abstract class Banco {
 
     function toListTeste($obj) {
 
+        //$inicio = ($obj->limite * $obj->pgAtual) - $obj->limite;
+
         $sql = "SELECT * FROM " . $obj->tabela;
+
+        $where = "";
+
+        if ($obj->filtro != NULL && $obj->vlrFiltro != NULL && in_array($obj->filtro, $obj->camposEstrangeiros)) {
+            $where.=" WHERE " . $obj->filtro . " IN ( SELECT id FROM " . $obj->filtro . " WHERE nome LIKE '" . $obj->vlrFiltro . "%')";
+        } else if ($obj->filtro != NULL && $obj->vlrFiltro != NULL) {
+            $where.=" WHERE " . $obj->filtro . " LIKE '" . $obj->vlrFiltro . "%'";
+        }
+
+        $sql.=$where;
+
         $this->stmt = $this->conexao->prepare($sql);
         $this->stmt->bindValue($obj->campoPk, $obj->valorPk);
         $this->stmt->execute();
