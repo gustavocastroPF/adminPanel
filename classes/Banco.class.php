@@ -173,38 +173,42 @@ abstract class Banco {
 
     function toListTeste($obj) {
 
-        //$inicio = ($obj->limite * $obj->pgAtual) - $obj->limite;
+        try {
+            $inicio = ($obj->limite * $obj->pgAtual) - $obj->limite;
 
-        $sql = "SELECT * FROM " . $obj->tabela;
+            $sql = "SELECT * FROM " . $obj->tabela;
 
-        $where = "";
+            $where = "";
 
-        if ($obj->filtro != NULL && $obj->vlrFiltro != NULL && in_array($obj->filtro, $obj->camposEstrangeiros)) {
-            $where.=" WHERE " . $obj->filtro . " IN ( SELECT id FROM " . $obj->filtro . " WHERE nome LIKE '" . $obj->vlrFiltro . "%')";
-        } else if ($obj->filtro != NULL && $obj->vlrFiltro != NULL) {
-            $where.=" WHERE " . $obj->filtro . " LIKE '" . $obj->vlrFiltro . "%'";
-        }
-
-        $sql.=$where;
-
-        $this->stmt = $this->conexao->prepare($sql);
-        $this->stmt->bindValue($obj->campoPk, $obj->valorPk);
-        $this->stmt->execute();
-        $objects = $this->stmt->fetchAll(PDO::FETCH_OBJ);
-
-        foreach ($objects as $object) {
-            foreach ($obj->camposEstrangeiros as $fk) {
-                $FK = new $fk();
-                $attr = $FK->tabela;
-                $sql = "SELECT * FROM " . $FK->tabela . " WHERE " . $FK->campoPk . " = :" . $FK->campoPk;
-                $this->stmt = $this->conexao->prepare($sql);
-                $this->stmt->bindValue($FK->campoPk, $object->$attr);
-                $this->stmt->execute();
-                $object->$attr = $this->stmt->fetch(PDO::FETCH_OBJ);
+            if ($obj->filtro != NULL && $obj->vlrFiltro != NULL && in_array($obj->filtro, $obj->camposEstrangeiros)) {
+                $where.=" WHERE " . $obj->filtro . " IN ( SELECT id FROM " . $obj->filtro . " WHERE nome LIKE '" . $obj->vlrFiltro . "%')";
+            } else if ($obj->filtro != NULL && $obj->vlrFiltro != NULL) {
+                $where.=" WHERE " . $obj->filtro . " LIKE '" . $obj->vlrFiltro . "%'";
             }
-        }
 
-        return $objects;
+            $sql.=$where;
+
+            $this->stmt = $this->conexao->prepare($sql);
+            $this->stmt->bindValue($obj->campoPk, $obj->valorPk);
+            $this->stmt->execute();
+            $objects = $this->stmt->fetchAll(PDO::FETCH_OBJ);
+
+            foreach ($objects as $object) {
+                foreach ($obj->camposEstrangeiros as $fk) {
+                    $FK = new $fk();
+                    $attr = $FK->tabela;
+                    $sql = "SELECT * FROM " . $FK->tabela . " WHERE " . $FK->campoPk . " = :" . $FK->campoPk;
+                    $this->stmt = $this->conexao->prepare($sql);
+                    $this->stmt->bindValue($FK->campoPk, $object->$attr);
+                    $this->stmt->execute();
+                    $object->$attr = $this->stmt->fetch(PDO::FETCH_OBJ);
+                }
+            }
+
+            return $objects;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
     }
 
     function toListAll($obj) {

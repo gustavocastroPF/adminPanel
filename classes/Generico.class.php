@@ -21,6 +21,12 @@ abstract class Generico extends Banco {
     public $limite = NULL;
     public $pgAtual = 1;
 
+    public function addCampoEstrangeiro($campo = NULL) {
+        if ($campo != NULL) {
+            array_push($this->camposEstrangeiros, $campo);
+        }
+    }
+
     public function addCampo($campo = NULL, $valor = NULL) {
         if ($campo != NULL) {
             $this->camposValores[$campo] = $valor;
