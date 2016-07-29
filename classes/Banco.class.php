@@ -3,7 +3,7 @@
 /**
  * Description of Banco
  *
- * @author gustavo
+ * @author Gustavo Castro
  */
 abstract class Banco {
 
@@ -136,6 +136,10 @@ abstract class Banco {
         }
     }
 
+    /*
+     * Vai ser substituido
+     */
+    
     public function toList($obj) {
         Try {
             $inicio = ($obj->limite * $obj->pgAtual) - $obj->limite;
@@ -211,6 +215,10 @@ abstract class Banco {
         }
     }
 
+    /*
+     * Vai ser substituido
+     */
+    
     function toListAll($obj) {
         Try {
             $inicio = ($obj->limite * $obj->pgAtual) - $obj->limite;
